@@ -452,7 +452,7 @@ h <- (length(rownames(mat)) * .25) + 8.5
 
 pdf(file=outfile, width = w, height = h)
 
-chrArmLegend = Legend(at = c("Deletion", "Homozygous deletion", "Gain", "High gain", "Copy neutral LoH"), 
+chrArmLegend = Legend(at = c("Deletion", "Homozygous deletion", "Gain", "High gain", "LOH"), 
                       title = "ChrArmLevelCNVs", 
                       type = "points" , 
                       pch=c(25,25, 24, 24, 20), 
