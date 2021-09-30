@@ -20,7 +20,7 @@ R -f make_oncoprint_plot.R --no-save --no-restore --args MY_OUT_PREFFIX.VERSION.
 
 ## conda setup
 
-[TODO] `conda install perl=5.26.2 perl-datetime=1.42 perl-getopt-long=2.50 bedtools=??? r=3.4.0 bioconductor-yapsa`
+[TODO] `conda install perl=5.26.2 perl-datetime=1.42 perl-getopt-long=2.50 bedtools=2.16.2 r=3.4.0 bioconductor-yapsa`
 
 ## Usage
 
