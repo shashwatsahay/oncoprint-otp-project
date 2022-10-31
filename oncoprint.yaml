@@ -14,4 +14,3 @@ dependencies:
   - r-irkernel
   - perl-list-moreutils
   
-prefix: /home/sahays/miniconda3/envs/oncoprint

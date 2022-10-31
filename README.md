@@ -32,7 +32,7 @@ R -f make_oncoprint_plot.R --no-save --no-restore --args MY_OUT_PREFFIX.VERSION.
 We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/your/project/tags).
 
  - v1.0.0: first working version (equivalent to v0.7)
- - v1.0.0: Added support for conda environment, Fixed '|' occurence in gene name when handling SV_direct
+ - v1.0.1: Added support for conda environment, Fixed '|' occurence in gene name when handling SV_direct
 
 ## Authors
 

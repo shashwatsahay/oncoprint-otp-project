@@ -46,28 +46,26 @@ selected_gene_list=NA
 ################################################################
 ### PARSE COMMAND LINE ARGUMENTS
 
-# GetoptLong(
-#     "title=s",                 "title of the oncoprint",
-#     "input_table=s",           "input oncorpint mutation matrix from oncorpint_table script (*.oncoprint.tsv)",
-#     "sampleinfo_table=s",      "sample info file from oncorpint_table script (*.sample_info.tsv)",
-#     "annotation_table=s",      "custom annotation file, with 'Sample' colummn as indentifier",
-#     "gene_info=s",             "", # ?
-#     "group_over=s",            "feature for sample ordering taken from annotation, sampleinfo or oncoprint fields (default none, e.g 'TP53' or 'CNA sex')",
-#     "remove_features=s",       "comma separated feature list to remove (recommend removing UTRs, intronic, SV TAD and SV near)",
-#     "features_to_keep=s",      "comma separated feature list to keep (this over rides remove_features)", 
-#     "min_recurrence=i",        "minimum recurrence threshold (default: 1)",
-#     "intogen_file=s",          "path to intogen results",
-#     "intogen_pvalue_column=s", "intogen significance column (default: MUTSIG_PVALUE)",
-#     "min_significance=i",      "minimum intogen p value (default: 1)",
-#     "cnas_num=i",              "top CNVs to be used in heatmap annotation (default: cnas_num)",
-#     "selected_gene_list=s",    "file containing selected list of genes, one gene per row",
-#     "verbose!",                "print messages"
-# )
-input_table<-'/dh-projects/pedion/A09R/analysis/user_folders/sahays/analysis/oncoprints/A09R.v0.15.min1.kataegis6.sv100000.cnv0.3.onco_print.renamed.tsv'
-sampleinfo_table<-'/dh-projects/pedion/A09R/analysis/user_folders/sahays/analysis/oncoprints/A09R.v0.15.min1.kataegis6.sv100000.cnv0.3.sample_info.renamed.tsv'
+GetoptLong(
+    "title=s",                 "title of the oncoprint",
+    "input_table=s",           "input oncorpint mutation matrix from oncorpint_table script (*.oncoprint.tsv)",
+    "sampleinfo_table=s",      "sample info file from oncorpint_table script (*.sample_info.tsv)",
+    "annotation_table=s",      "custom annotation file, with 'Sample' colummn as indentifier",
+    "gene_info=s",             "", # ?
+    "group_over=s",            "feature for sample ordering taken from annotation, sampleinfo or oncoprint fields (default none, e.g 'TP53' or 'CNA sex')",
+    "remove_features=s",       "comma separated feature list to remove (recommend removing UTRs, intronic, SV TAD and SV near)",
+    "features_to_keep=s",      "comma separated feature list to keep (this over rides remove_features)", 
+    "min_recurrence=i",        "minimum recurrence threshold (default: 1)",
+    "intogen_file=s",          "path to intogen results",
+    "intogen_pvalue_column=s", "intogen significance column (default: MUTSIG_PVALUE)",
+    "min_significance=i",      "minimum intogen p value (default: 1)",
+    "cnas_num=i",              "top CNVs to be used in heatmap annotation (default: cnas_num)",
+    "selected_gene_list=s",    "file containing selected list of genes, one gene per row",
+    "verbose!",                "print messages"
+)
+
 min_recurrence=24 
 cnas_num=6 
-annotation_table='/dh-projects/pedion/A09R/analysis/user_folders/sahays/analysis/oncoprints/A09R_annotations.tsv'
 #group_over='Sort_order'
 
 print(paste("Input mutation matrix:", input_table))
@@ -405,7 +403,6 @@ if(!group_over=="NA"){
     feature=group_over
 
     if (feature %in% names(annot)) {
-        print('LALALALALALALA-------------------------------------------------')
       print(paste0("Found feature ",feature," in sampleannotation"))
       group_temp <- as.matrix(annot[feature])
       group_temp [is.na(group_temp)] = ""

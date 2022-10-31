@@ -97,10 +97,10 @@ my $version_noDots = "v015"; # else intogen will not work
 ## PROJECT VARIABLES ##
 #######################
 
-my $results_dir = "/dh-projects/pedion/A09R/analysis/user_folders/sahays/results_per_pid";
-my $genome_fai = "/applications/otp/ngs_share_complete/assemblies/hg19_GRCh37_1000genomes/sequence/1KGRef/hs37d5.fa.fai";
-my $chrom_arms = "/applications/otp/ngs_share_complete/assemblies/hg19_GRCh37_1000genomes/stats/hg19armsizesXY.plain.bed";
-my $genes_bed = "/applications/otp/ngs_share_complete/assemblies/hg19_GRCh37_1000genomes/databases/gencode/gencode19/gencode.v19.annotation_plain.genes.bed";
+my $results_dir = "/icgc/dkfzlsdf/analysis/hipo/my_hipo_project/whole_genome_sequencing/results_per_pid/";
+my $genome_fai = "/icgc/ngs_share/assemblies/hg19_GRCh37_1000genomes/sequence/1KGRef/hs37d5.fa.fai";
+my $chrom_arms = "/icgc/ngs_share/assemblies/hg19_GRCh37_1000genomes/stats/hg19armsizesXY.plain.bed";
+my $genes_bed = "/icgc/ngs_share/assemblies/hg19_GRCh37_1000genomes/databases/gencode/gencode19/gencode.v19.annotation_plain.genes.bed";
 
 ####################
 ## FILE VARIABLES ##
@@ -127,12 +127,10 @@ my $ext_indel_germline = "_germline_functional_TiN_filtered_regi_conf_8_to_10.vc
 
 
 # svs and cnvs (use either the default OTP files or any of the edited files listed below):
-#my $ext_sv  = "_filtered_somatic_minEventScore3.tsv"; # comment: default from OTP 
+my $ext_sv  = "_filtered_somatic_minEventScore3.tsv"; # comment: default from OTP 
 #my $ext_sv = "_*_filtered_somatic.tsv"; # comment: default from OTP, lower confidence
-#my $ext_cnv = "_most_important_info*"; # comment: default from OTP
+my $ext_cnv = "_most_important_info*"; # comment: default from OTP
 
-my $ext_sv  = "_filtered_somatic_minEventScore3.tsv.sgcd_filtered.tsv"; # comment: specific
-my $ext_cnv = "_real_info*"; # comment: project specific
 
 # prefix
 my $pre_snv   = "snvs_";
@@ -194,7 +192,7 @@ GetOptions("shm=i"                 => \$shm_number,
            "arm_percentage=f"      => \$chr_arm_level_CNV_percentage,
            "results_dir=s"         => \$results_dir,
            "pids=s"                => \$pid_list,
-	       "output_prefix=s"       => \$output_prefix,
+	         "output_prefix=s"       => \$output_prefix,
            "cnv_overview_table=s"  => \$cnv_overview_table,
            "fusion_rnaseq_dir=s"   => \$rnaseq_rpp_dir,
            "threshold_cnv=f"       => \$threshold_cnv,
