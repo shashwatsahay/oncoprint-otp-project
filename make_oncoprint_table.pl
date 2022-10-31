@@ -97,10 +97,10 @@ my $version_noDots = "v015"; # else intogen will not work
 ## PROJECT VARIABLES ##
 #######################
 
-my $results_dir = "/icgc/dkfzlsdf/analysis/hipo/my_hipo_project/whole_genome_sequencing/results_per_pid/";
-my $genome_fai = "/icgc/ngs_share/assemblies/hg19_GRCh37_1000genomes/sequence/1KGRef/hs37d5.fa.fai";
-my $chrom_arms = "/icgc/ngs_share/assemblies/hg19_GRCh37_1000genomes/stats/hg19armsizesXY.plain.bed";
-my $genes_bed = "/icgc/ngs_share/assemblies/hg19_GRCh37_1000genomes/databases/gencode/gencode19/gencode.v19.annotation_plain.genes.bed";
+my $results_dir = "<project_folder>/whole_genome_sequencing/results_per_pid";
+my $genome_fai = "/applications/otp/ngs_share_complete/assemblies/hg19_GRCh37_1000genomes/sequence/1KGRef/hs37d5.fa.fai";
+my $chrom_arms = "/applications/otp/ngs_share_complete/assemblies/hg19_GRCh37_1000genomes/stats/hg19armsizesXY.plain.bed";
+my $genes_bed = "/applications/otp/ngs_share_complete/assemblies/hg19_GRCh37_1000genomes/databases/gencode/gencode19/gencode.v19.annotation_plain.genes.bed";
 
 ####################
 ## FILE VARIABLES ##
@@ -192,7 +192,7 @@ GetOptions("shm=i"                 => \$shm_number,
            "arm_percentage=f"      => \$chr_arm_level_CNV_percentage,
            "results_dir=s"         => \$results_dir,
            "pids=s"                => \$pid_list,
-           "output_prefix=s"       => \$output_prefix,
+	       "output_prefix=s"       => \$output_prefix,
            "cnv_overview_table=s"  => \$cnv_overview_table,
            "fusion_rnaseq_dir=s"   => \$rnaseq_rpp_dir,
            "threshold_cnv=f"       => \$threshold_cnv,
@@ -614,7 +614,7 @@ close($task_conf_fh);
 close($scheduler_conf_fh);
 close($system_conf_fh);
 
-`cp -R /icgc/ngs_share/general/intogen/MutSigCV_1.4/* $intogen_dir/MutSig && chmod 777 -R $intogen_dir/MutSig`;
+`cp -R /applications/otp/ngs_share_complete/general/intogen/MutSigCV_1.4/* $intogen_dir/MutSig && chmod 777 -R $intogen_dir/MutSig`;
 
 my $vcf_file_list = "";
 
