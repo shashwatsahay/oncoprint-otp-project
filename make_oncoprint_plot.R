@@ -46,23 +46,29 @@ selected_gene_list=NA
 ################################################################
 ### PARSE COMMAND LINE ARGUMENTS
 
-GetoptLong(
-    "title=s",                 "title of the oncoprint",
-    "input_table=s",           "input oncorpint mutation matrix from oncorpint_table script (*.oncoprint.tsv)",
-    "sampleinfo_table=s",      "sample info file from oncorpint_table script (*.sample_info.tsv)",
-    "annotation_table=s",      "custom annotation file, with 'Sample' colummn as indentifier",
-    "gene_info=s",             "", # ?
-    "group_over=s",            "feature for sample ordering taken from annotation, sampleinfo or oncoprint fields (default none, e.g 'TP53' or 'CNA sex')",
-    "remove_features=s",       "comma separated feature list to remove (recommend removing UTRs, intronic, SV TAD and SV near)",
-    "features_to_keep=s",      "comma separated feature list to keep (this over rides remove_features)", 
-    "min_recurrence=i",        "minimum recurrence threshold (default: 1)",
-    "intogen_file=s",          "path to intogen results",
-    "intogen_pvalue_column=s", "intogen significance column (default: MUTSIG_PVALUE)",
-    "min_significance=i",      "minimum intogen p value (default: 1)",
-    "cnas_num=i",              "top CNVs to be used in heatmap annotation (default: cnas_num)",
-    "selected_gene_list=s",    "file containing selected list of genes, one gene per row",
-    "verbose!",                "print messages"
-)
+# GetoptLong(
+#     "title=s",                 "title of the oncoprint",
+#     "input_table=s",           "input oncorpint mutation matrix from oncorpint_table script (*.oncoprint.tsv)",
+#     "sampleinfo_table=s",      "sample info file from oncorpint_table script (*.sample_info.tsv)",
+#     "annotation_table=s",      "custom annotation file, with 'Sample' colummn as indentifier",
+#     "gene_info=s",             "", # ?
+#     "group_over=s",            "feature for sample ordering taken from annotation, sampleinfo or oncoprint fields (default none, e.g 'TP53' or 'CNA sex')",
+#     "remove_features=s",       "comma separated feature list to remove (recommend removing UTRs, intronic, SV TAD and SV near)",
+#     "features_to_keep=s",      "comma separated feature list to keep (this over rides remove_features)", 
+#     "min_recurrence=i",        "minimum recurrence threshold (default: 1)",
+#     "intogen_file=s",          "path to intogen results",
+#     "intogen_pvalue_column=s", "intogen significance column (default: MUTSIG_PVALUE)",
+#     "min_significance=i",      "minimum intogen p value (default: 1)",
+#     "cnas_num=i",              "top CNVs to be used in heatmap annotation (default: cnas_num)",
+#     "selected_gene_list=s",    "file containing selected list of genes, one gene per row",
+#     "verbose!",                "print messages"
+# )
+input_table<-'/dh-projects/pedion/A09R/analysis/user_folders/sahays/analysis/oncoprints/A09R.v0.15.min1.kataegis6.sv100000.cnv0.3.onco_print.renamed.tsv'
+sampleinfo_table<-'/dh-projects/pedion/A09R/analysis/user_folders/sahays/analysis/oncoprints/A09R.v0.15.min1.kataegis6.sv100000.cnv0.3.sample_info.renamed.tsv'
+min_recurrence=24 
+cnas_num=6 
+annotation_table='/dh-projects/pedion/A09R/analysis/user_folders/sahays/analysis/oncoprints/A09R_annotations.tsv'
+#group_over='Sort_order'
 
 print(paste("Input mutation matrix:", input_table))
 print(paste("Sample info file:", sampleinfo_table))
@@ -247,7 +253,7 @@ if(!is.na(annotation_table)) {
     all_annot <- merge(annot, custom_table, by="row.names")
     rownames(all_annot) <- all_annot[[1]]
     all_annot <- all_annot[-1]
-    annot <- all_annot
+    annot<-all_annot[rownames(annot),]
   } else {
     stop("Custom annotation row names don't match the oncoprint mat column names")
   }
@@ -330,7 +336,7 @@ column_ha = HeatmapAnnotation(
 ### Custom annotations
 
 if(!is.na(annotation_table)) {
-  custom_ha <- HeatmapAnnotation(df = all_annot[colnames(custom_table)], annotation_name_gp = gpar(fontsize=10), show_annotation_name=T)
+  custom_ha <- HeatmapAnnotation(df = annot[colnames(custom_table)], annotation_name_gp = gpar(fontsize=10), show_annotation_name=T)
   column_ha = c(column_ha, custom_ha)
 }
 
@@ -399,17 +405,19 @@ if(!group_over=="NA"){
     feature=group_over
 
     if (feature %in% names(annot)) {
+        print('LALALALALALALA-------------------------------------------------')
       print(paste0("Found feature ",feature," in sampleannotation"))
       group_temp <- as.matrix(annot[feature])
       group_temp [is.na(group_temp)] = ""
       names(group_temp) <- colnames(mat)
       group_temp_uniq <- as.matrix(unique(sort(as.matrix(group_temp), decreasing=FALSE)))
       iterator=0
-      for(level in group_temp_uniq){
-        print(paste0("Subgrouping sampleinfo feature ",group_over," - ", level))
-        grouping_vector[as.matrix(group_temp)==level] <- grouping_vector[as.matrix(group_temp)==level] + iterator
-        iterator = iterator + 1
-      }
+      grouping_vector<-setNames(as.numeric(factor(group_temp)), rownames(group_temp))[names(grouping_vector)]
+      # for(level in group_temp_uniq){
+      #   print(paste0("Subgrouping sampleinfo feature ",group_over," - ", level))
+      #   grouping_vector[as.matrix(group_temp)==level] <- grouping_vector[as.matrix(group_temp)==level] + iterator
+      #   iterator = iterator + 1
+      # }
     } else if (feature %in% rownames(mat)) {
       print(paste0("Found feature ",feature," in oncoprint matrix"))
       group_temp <- as.matrix(mat[feature,])
@@ -440,7 +448,7 @@ mat <- mat[l, ]
 dim(mat)
 
 mat_order <- oncoprintOrder(mat,grouping_vector)
-
+print(mat_order$sample_ind)
 ################################################################
 ### PLOT
 

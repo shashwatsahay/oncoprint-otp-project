@@ -33,3 +33,7 @@ inc/
 /MANIFEST.bak
 /pm_to_blib
 /*.zip
+
+# jupyter notebook checkpoints
+*.ipynb
+.ipynb_checkpoints/

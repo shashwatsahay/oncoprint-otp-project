@@ -97,10 +97,10 @@ my $version_noDots = "v015"; # else intogen will not work
 ## PROJECT VARIABLES ##
 #######################
 
-my $results_dir = "/icgc/dkfzlsdf/analysis/hipo/my_hipo_project/whole_genome_sequencing/results_per_pid/";
-my $genome_fai = "/icgc/ngs_share/assemblies/hg19_GRCh37_1000genomes/sequence/1KGRef/hs37d5.fa.fai";
-my $chrom_arms = "/icgc/ngs_share/assemblies/hg19_GRCh37_1000genomes/stats/hg19armsizesXY.plain.bed";
-my $genes_bed = "/icgc/ngs_share/assemblies/hg19_GRCh37_1000genomes/databases/gencode/gencode19/gencode.v19.annotation_plain.genes.bed";
+my $results_dir = "/dh-projects/pedion/A09R/analysis/user_folders/sahays/results_per_pid";
+my $genome_fai = "/applications/otp/ngs_share_complete/assemblies/hg19_GRCh37_1000genomes/sequence/1KGRef/hs37d5.fa.fai";
+my $chrom_arms = "/applications/otp/ngs_share_complete/assemblies/hg19_GRCh37_1000genomes/stats/hg19armsizesXY.plain.bed";
+my $genes_bed = "/applications/otp/ngs_share_complete/assemblies/hg19_GRCh37_1000genomes/databases/gencode/gencode19/gencode.v19.annotation_plain.genes.bed";
 
 ####################
 ## FILE VARIABLES ##
@@ -127,9 +127,12 @@ my $ext_indel_germline = "_germline_functional_TiN_filtered_regi_conf_8_to_10.vc
 
 
 # svs and cnvs (use either the default OTP files or any of the edited files listed below):
-my $ext_sv  = "_filtered_somatic_minEventScore3.tsv"; # comment: default from OTP 
+#my $ext_sv  = "_filtered_somatic_minEventScore3.tsv"; # comment: default from OTP 
 #my $ext_sv = "_*_filtered_somatic.tsv"; # comment: default from OTP, lower confidence
-my $ext_cnv = "_most_important_info*"; # comment: default from OTP
+#my $ext_cnv = "_most_important_info*"; # comment: default from OTP
+
+my $ext_sv  = "_filtered_somatic_minEventScore3.tsv.sgcd_filtered.tsv"; # comment: specific
+my $ext_cnv = "_real_info*"; # comment: project specific
 
 # prefix
 my $pre_snv   = "snvs_";
@@ -191,10 +194,13 @@ GetOptions("shm=i"                 => \$shm_number,
            "arm_percentage=f"      => \$chr_arm_level_CNV_percentage,
            "results_dir=s"         => \$results_dir,
            "pids=s"                => \$pid_list,
-	   "output_prefix=s"       => \$output_prefix,
+	       "output_prefix=s"       => \$output_prefix,
            "cnv_overview_table=s"  => \$cnv_overview_table,
            "fusion_rnaseq_dir=s"   => \$rnaseq_rpp_dir,
-           "threshold_cnv=f"       => \$threshold_cnv
+           "threshold_cnv=f"       => \$threshold_cnv,
+           "genome_fai=s"            => \$genome_fai,
+           "chrom_arms=s"            => \$chrom_arms,
+           "genes_bed=s"             => \$genes_bed
            ) or die ("Error in command line arguments\n");
 
 warn "WARNING: output_prefix not defined\n" unless defined $output_prefix;
@@ -484,12 +490,12 @@ warn "\n\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#
 ###################
 warn "\# PARSING: intogen command (run separately) ...\n";
 
-`mkdir $intogen_dir/`;
-`mkdir $intogen_dir/vcfs`;
-`mkdir $intogen_dir/config`;
-`mkdir $intogen_dir/config/tmp`;
-`mkdir $intogen_dir/MutSig`;
-`mkdir $intogen_dir/tmp`;
+`mkdir -p $intogen_dir/`;
+`mkdir -p $intogen_dir/vcfs`;
+`mkdir -p $intogen_dir/config`;
+`mkdir -p $intogen_dir/config/tmp`;
+`mkdir -p $intogen_dir/MutSig`;
+`mkdir -p $intogen_dir/tmp`;
 
 my $cwd = cwd();
 
@@ -610,7 +616,7 @@ close($task_conf_fh);
 close($scheduler_conf_fh);
 close($system_conf_fh);
 
-`cp -R /icgc/ngs_share/general/intogen/MutSigCV_1.4/* $intogen_dir/MutSig && chmod 777 -R $intogen_dir/MutSig`;
+`cp -R /applications/otp/ngs_share_complete/general/intogen/MutSigCV_1.4/* $intogen_dir/MutSig && chmod 777 -R $intogen_dir/MutSig`;
 
 my $vcf_file_list = "";
 
@@ -1200,7 +1206,7 @@ foreach my $pid (@pids){
     for my $direct_index($header_index{$svs_gene1},$header_index{$svs_gene2}){
       my @genes1_direct = split (",", $locus[$direct_index]);
       foreach my $gene1_direct (@genes1_direct){
-        my @gene_split = split("_",$gene1_direct);
+        my @gene_split = split(/\|/,$gene1_direct); 
         $output_hash{$gene_split[0]}{"SV_direct"}{"."}{$pid} = $output_hash{$gene_split[0]}{"SV_direct"}{"."}{$pid} + 1 unless ($gene_split[0] eq ".");
         $output_hash{$gene_split[0]}{"SV_direct"}{$sv_type}{$pid} = $output_hash{$gene_split[0]}{"SV_direct"}{$sv_type}{$pid} + 1 unless ($gene_split[0] eq ".");
       }
