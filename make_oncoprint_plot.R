@@ -64,9 +64,6 @@ GetoptLong(
     "verbose!",                "print messages"
 )
 
-min_recurrence=24 
-cnas_num=6 
-#group_over='Sort_order'
 
 print(paste("Input mutation matrix:", input_table))
 print(paste("Sample info file:", sampleinfo_table))
@@ -445,7 +442,7 @@ mat <- mat[l, ]
 dim(mat)
 
 mat_order <- oncoprintOrder(mat,grouping_vector)
-print(mat_order$sample_ind)
+
 ################################################################
 ### PLOT
 
